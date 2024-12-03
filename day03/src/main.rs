@@ -21,35 +21,27 @@ fn execute(parsed_input: &[String], track_enabled: bool) -> i32 {
         .map(|line| {
             operations
                 .captures_iter(line)
-                .map(|matched| {
-                    matched
-                        .iter()
-                        .skip(1)
-                        .map(|operation| match operation.unwrap().as_str() {
-                            "don't()" => {
-                                if track_enabled {
-                                    enabled = false;
-                                }
-                                0
-                            }
-                            "do()" => {
-                                enabled = true;
-                                0
-                            }
-                            mul => {
-                                if enabled {
-                                    let captures = operands.captures(mul).unwrap();
-                                    let a =
-                                        captures.get(1).unwrap().as_str().parse::<i32>().unwrap();
-                                    let b =
-                                        captures.get(2).unwrap().as_str().parse::<i32>().unwrap();
-                                    a * b
-                                } else {
-                                    0
-                                }
-                            }
-                        })
-                        .sum::<i32>()
+                .map(|operation| match operation.get(1).unwrap().as_str() {
+                    "don't()" => {
+                        if track_enabled {
+                            enabled = false;
+                        }
+                        0
+                    }
+                    "do()" => {
+                        enabled = true;
+                        0
+                    }
+                    mul => {
+                        if enabled {
+                            let captures = operands.captures(mul).unwrap();
+                            let a = captures.get(1).unwrap().as_str().parse::<i32>().unwrap();
+                            let b = captures.get(2).unwrap().as_str().parse::<i32>().unwrap();
+                            a * b
+                        } else {
+                            0
+                        }
+                    }
                 })
                 .sum::<i32>()
         })
