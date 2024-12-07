@@ -31,7 +31,7 @@ fn solve_equation(equation: &Equation, result: usize, skip: usize, with_concat: 
         return result == equation.test;
     }
 
-    let magnitude = 10_usize.pow(equation.operands[skip].to_string().len() as u32);
+    let magnitude = 10_usize.pow(equation.operands[skip].ilog10() + 1);
 
     solve_equation(
         equation,
