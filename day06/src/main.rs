@@ -4,7 +4,6 @@ use std::{collections::HashSet, env::args, fs::read_to_string, path::Path};
 enum Tile {
     Empty,
     Obstacle,
-    Visited,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -55,30 +54,14 @@ where
     (grid, guard.unwrap())
 }
 
-#[allow(dead_code)]
-fn print_grid(grid: &Vec<Vec<Tile>>) {
-    for row in grid {
-        for tile in row {
-            match tile {
-                Tile::Empty => print!("."),
-                Tile::Obstacle => print!("#"),
-                Tile::Visited => print!("X"),
-            }
-        }
-        println!();
-    }
-}
-
 fn on_grid(grid: &[Vec<Tile>], x: i32, y: i32) -> bool {
     x >= 0 && x < grid[0].len() as i32 && y >= 0 && y < grid.len() as i32
 }
 
-fn run_guard(grid: &mut [Vec<Tile>], guard: &mut Guard) {
+fn run_guard(grid: &[Vec<Tile>], guard: &mut Guard) -> HashSet<Guard> {
     let mut history = HashSet::new();
 
     loop {
-        grid[guard.y as usize][guard.x as usize] = Tile::Visited;
-
         if history.contains(guard) {
             break;
         }
@@ -112,30 +95,37 @@ fn run_guard(grid: &mut [Vec<Tile>], guard: &mut Guard) {
             }
         }
     }
+
+    history
 }
 
-fn solve_part1(grid: &Vec<Vec<Tile>>, guard: &Guard) -> usize {
-    let mut grid = (*grid).clone();
+fn solve_part1(grid: &[Vec<Tile>], guard: &Guard) -> usize {
     let mut guard = (*guard).clone();
 
-    run_guard(&mut grid, &mut guard);
+    let history = run_guard(grid, &mut guard);
 
-    grid.iter()
-        .flatten()
-        .filter(|tile| matches!(tile, Tile::Visited))
-        .count()
+    history
+        .iter()
+        .map(|guard| (guard.x, guard.y))
+        .collect::<HashSet<_>>()
+        .len()
 }
 
-fn solve_part2(original_grid: &Vec<Vec<Tile>>, original_guard: &Guard) -> usize {
+fn solve_part2(grid: &Vec<Vec<Tile>>, original_guard: &Guard) -> usize {
+    let mut grid = (*grid).clone();
     let mut count = 0;
 
-    for y in 0..original_grid.len() {
-        for x in 0..original_grid[0].len() {
-            let mut grid = (*original_grid).clone();
+    for y in 0..grid.len() {
+        for x in 0..grid[0].len() {
+            if matches!(grid[y][x], Tile::Obstacle) {
+                continue;
+            }
+
             let mut guard = (*original_guard).clone();
 
             grid[y][x] = Tile::Obstacle;
-            run_guard(&mut grid, &mut guard);
+            run_guard(&grid, &mut guard);
+            grid[y][x] = Tile::Empty;
 
             if on_grid(&grid, guard.x, guard.y) {
                 count += 1;
