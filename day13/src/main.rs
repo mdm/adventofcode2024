@@ -106,7 +106,11 @@ fn min_tokens_smart(machine: &Machine) -> Option<usize> {
     let rhs =
         machine.prize.y * machine.button_a.delta_x - machine.prize.x * machine.button_a.delta_y;
 
-    if rhs.signum() != lhs.signum() {
+    // if rhs.signum() != lhs.signum() {
+    //     return None;
+    // }
+
+    if lhs == 0 {
         return None;
     }
 
@@ -115,17 +119,13 @@ fn min_tokens_smart(machine: &Machine) -> Option<usize> {
     }
 
     let pressed_b = rhs / lhs;
-    let pressed_a =
-        (machine.prize.x - machine.button_b.delta_x * pressed_b) / machine.button_a.delta_x;
+    let remaining_x = machine.prize.x - machine.button_b.delta_x * pressed_b;
 
-    if machine.button_a.delta_x * pressed_a + machine.button_b.delta_x * pressed_b
-        != machine.prize.x
-        || machine.button_a.delta_y * pressed_a + machine.button_b.delta_y * pressed_b
-            != machine.prize.y
-    {
-        dbg!(lhs, rhs, pressed_a, pressed_b); // why is this happening?
+    if remaining_x % machine.button_a.delta_x != 0 {
         return None;
     }
+
+    let pressed_a = remaining_x / machine.button_a.delta_x;
 
     Some(3 * pressed_a as usize + pressed_b as usize)
 }
