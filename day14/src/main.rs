@@ -50,22 +50,11 @@ where
 {
     let raw_input = read_to_string(filename).expect("Failed to read input file");
 
-    // let mut min_x = i64::MAX;
-    // let mut min_y = i64::MAX;
     let robots = raw_input
         .lines()
         .map(|line| line.parse().unwrap())
-        // .inspect(|robot: &Robot| {
-        //     if robot.position.x < min_x {
-        //         min_x = robot.position.x
-        //     }
-        //     if robot.position.y < min_y {
-        //         min_y = robot.position.y
-        //     }
-        // })
         .collect();
 
-    // dbg!(min_x, min_y);
     robots
 }
 
@@ -102,27 +91,22 @@ fn solve_part1(robots: &[Robot], width: i64, height: i64) -> usize {
         let y = robot.position.y;
 
         if x < width / 2 && y < height / 2 {
-            // dbg!(top_left, x, y);
             top_left += 1;
         }
 
         if x > width / 2 && y < height / 2 {
-            // dbg!(top_right, x, y);
             top_right += 1;
         }
 
         if x < width / 2 && y > height / 2 {
-            // dbg!(bottom_left, x, y);
             bottom_left += 1;
         }
 
         if x > width / 2 && y > height / 2 {
-            // dbg!(bottom_right, x, y);
             bottom_right += 1;
         }
     });
 
-    // dbg!(top_left, top_right, bottom_left, bottom_right);
     [top_left, top_right, bottom_left, bottom_right]
         .iter()
         .product()
@@ -143,7 +127,6 @@ fn detect_tree(robots: &[Robot], width: i64, height: i64) -> bool {
             }
 
             if run > longest_run {
-                // dbg!(x, y);
                 longest_run = run;
             }
         }
