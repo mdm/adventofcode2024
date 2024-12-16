@@ -1,0 +1,1922 @@
+   Compiling day16 v0.1.0 (/home/marc/Code/mine/aoc/2024/day16)
+warning: unused imports: `BinaryHeap` and `HashMap`
+ --> src/main.rs:2:19
+  |
+2 |     collections::{BinaryHeap, HashMap, HashSet},
+  |                   ^^^^^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused variable: `map`
+   --> src/main.rs:144:16
+    |
+144 | fn solve_part2(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) -> usize {
+    |                ^^^ help: if this is intentional, prefix it with an underscore: `_map`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `start`
+   --> src/main.rs:144:35
+    |
+144 | fn solve_part2(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) -> usize {
+    |                                   ^^^^^ help: if this is intentional, prefix it with an underscore: `_start`
+
+warning: unused variable: `end`
+   --> src/main.rs:144:58
+    |
+144 | fn solve_part2(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) -> usize {
+    |                                                          ^^^ help: if this is intentional, prefix it with an underscore: `_end`
+
+warning: `day16` (bin "day16") generated 4 warnings (run `cargo fix --bin "day16"` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running `target/debug/day16 test1.txt`
+[src/main.rs:70:9] position = (
+    1,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = 0
+[src/main.rs:70:9] position = (
+    2,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -1
+[src/main.rs:70:9] position = (
+    3,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2
+[src/main.rs:70:9] position = (
+    1,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -1000
+[src/main.rs:70:9] position = (
+    1,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1000
+[src/main.rs:70:9] position = (
+    2,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1001
+[src/main.rs:70:9] position = (
+    2,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -1001
+[src/main.rs:70:9] position = (
+    1,
+    12,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1001
+[src/main.rs:70:9] position = (
+    3,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -1002
+[src/main.rs:70:9] position = (
+    3,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1002
+[src/main.rs:70:9] position = (
+    1,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1002
+[src/main.rs:70:9] position = (
+    1,
+    10,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1003
+[src/main.rs:70:9] position = (
+    1,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -1004
+[src/main.rs:70:9] position = (
+    1,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2000
+[src/main.rs:70:9] position = (
+    1,
+    12,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2001
+[src/main.rs:70:9] position = (
+    1,
+    12,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2001
+[src/main.rs:70:9] position = (
+    2,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2001
+[src/main.rs:70:9] position = (
+    3,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2002
+[src/main.rs:70:9] position = (
+    1,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2002
+[src/main.rs:70:9] position = (
+    1,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2002
+[src/main.rs:70:9] position = (
+    1,
+    10,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2003
+[src/main.rs:70:9] position = (
+    1,
+    10,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2003
+[src/main.rs:70:9] position = (
+    2,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2003
+[src/main.rs:70:9] position = (
+    1,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2004
+[src/main.rs:70:9] position = (
+    1,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -2004
+[src/main.rs:70:9] position = (
+    3,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2004
+[src/main.rs:70:9] position = (
+    2,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2005
+[src/main.rs:70:9] position = (
+    4,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2005
+[src/main.rs:70:9] position = (
+    3,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2006
+[src/main.rs:70:9] position = (
+    5,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -2006
+[src/main.rs:70:9] position = (
+    1,
+    12,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3001
+[src/main.rs:70:9] position = (
+    1,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3002
+[src/main.rs:70:9] position = (
+    2,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3003
+[src/main.rs:70:9] position = (
+    1,
+    10,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3003
+[src/main.rs:70:9] position = (
+    2,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3003
+[src/main.rs:70:9] position = (
+    3,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3004
+[src/main.rs:70:9] position = (
+    3,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3004
+[src/main.rs:70:9] position = (
+    1,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3004
+[src/main.rs:70:9] position = (
+    4,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3005
+[src/main.rs:70:9] position = (
+    2,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3005
+[src/main.rs:70:9] position = (
+    2,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3005
+[src/main.rs:70:9] position = (
+    4,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3005
+[src/main.rs:70:9] position = (
+    3,
+    10,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3005
+[src/main.rs:70:9] position = (
+    5,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3006
+[src/main.rs:70:9] position = (
+    3,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3006
+[src/main.rs:70:9] position = (
+    5,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3006
+[src/main.rs:70:9] position = (
+    3,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3006
+[src/main.rs:70:9] position = (
+    5,
+    12,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3007
+[src/main.rs:70:9] position = (
+    5,
+    10,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3007
+[src/main.rs:70:9] position = (
+    3,
+    10,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3007
+[src/main.rs:70:9] position = (
+    3,
+    8,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3007
+[src/main.rs:70:9] position = (
+    5,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -3008
+[src/main.rs:70:9] position = (
+    5,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3008
+[src/main.rs:70:9] position = (
+    3,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3008
+[src/main.rs:70:9] position = (
+    5,
+    8,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3009
+[src/main.rs:70:9] position = (
+    3,
+    6,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3009
+[src/main.rs:70:9] position = (
+    5,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3010
+[src/main.rs:70:9] position = (
+    3,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -3010
+[src/main.rs:70:9] position = (
+    2,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4003
+[src/main.rs:70:9] position = (
+    3,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4004
+[src/main.rs:70:9] position = (
+    4,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4005
+[src/main.rs:70:9] position = (
+    2,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4005
+[src/main.rs:70:9] position = (
+    3,
+    10,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4005
+[src/main.rs:70:9] position = (
+    5,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4006
+[src/main.rs:70:9] position = (
+    3,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4006
+[src/main.rs:70:9] position = (
+    5,
+    10,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    3,
+    8,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    3,
+    10,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    5,
+    12,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    5,
+    12,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    5,
+    10,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    3,
+    8,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4007
+[src/main.rs:70:9] position = (
+    3,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4008
+[src/main.rs:70:9] position = (
+    5,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4008
+[src/main.rs:70:9] position = (
+    5,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4008
+[src/main.rs:70:9] position = (
+    3,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4008
+[src/main.rs:70:9] position = (
+    5,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4008
+[src/main.rs:70:9] position = (
+    5,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4008
+[src/main.rs:70:9] position = (
+    6,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    5,
+    8,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    4,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    6,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    3,
+    6,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    5,
+    8,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    2,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    3,
+    6,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4009
+[src/main.rs:70:9] position = (
+    5,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    3,
+    5,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    7,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    7,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    1,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    3,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    5,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4010
+[src/main.rs:70:9] position = (
+    4,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -4011
+[src/main.rs:70:9] position = (
+    8,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4011
+[src/main.rs:70:9] position = (
+    8,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4011
+[src/main.rs:70:9] position = (
+    6,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4011
+[src/main.rs:70:9] position = (
+    9,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4012
+[src/main.rs:70:9] position = (
+    9,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4012
+[src/main.rs:70:9] position = (
+    7,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4012
+[src/main.rs:70:9] position = (
+    8,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4013
+[src/main.rs:70:9] position = (
+    9,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4014
+[src/main.rs:70:9] position = (
+    10,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4015
+[src/main.rs:70:9] position = (
+    11,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -4016
+[src/main.rs:70:9] position = (
+    3,
+    8,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5007
+[src/main.rs:70:9] position = (
+    5,
+    12,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5007
+[src/main.rs:70:9] position = (
+    5,
+    10,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5007
+[src/main.rs:70:9] position = (
+    5,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5008
+[src/main.rs:70:9] position = (
+    3,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5008
+[src/main.rs:70:9] position = (
+    5,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5008
+[src/main.rs:70:9] position = (
+    6,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    2,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    2,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    6,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    6,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    4,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    5,
+    8,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    6,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    3,
+    6,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5009
+[src/main.rs:70:9] position = (
+    5,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    1,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    3,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    7,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    7,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    1,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    7,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    7,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5010
+[src/main.rs:70:9] position = (
+    6,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    7,
+    12,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    6,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    4,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    1,
+    6,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    8,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    8,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    8,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    8,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5011
+[src/main.rs:70:9] position = (
+    9,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    7,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    7,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    9,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    9,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    9,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    7,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    1,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5012
+[src/main.rs:70:9] position = (
+    8,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5013
+[src/main.rs:70:9] position = (
+    8,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5013
+[src/main.rs:70:9] position = (
+    9,
+    10,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5013
+[src/main.rs:70:9] position = (
+    9,
+    12,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5013
+[src/main.rs:70:9] position = (
+    1,
+    4,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5013
+[src/main.rs:70:9] position = (
+    9,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5014
+[src/main.rs:70:9] position = (
+    9,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5014
+[src/main.rs:70:9] position = (
+    1,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5014
+[src/main.rs:70:9] position = (
+    9,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5014
+[src/main.rs:70:9] position = (
+    9,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5014
+[src/main.rs:70:9] position = (
+    9,
+    6,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5015
+[src/main.rs:70:9] position = (
+    9,
+    10,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5015
+[src/main.rs:70:9] position = (
+    1,
+    2,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5015
+[src/main.rs:70:9] position = (
+    9,
+    12,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5015
+[src/main.rs:70:9] position = (
+    10,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5015
+[src/main.rs:70:9] position = (
+    10,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5015
+[src/main.rs:70:9] position = (
+    9,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5016
+[src/main.rs:70:9] position = (
+    1,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5016
+[src/main.rs:70:9] position = (
+    11,
+    7,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5016
+[src/main.rs:70:9] position = (
+    11,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -5016
+[src/main.rs:70:9] position = (
+    11,
+    8,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5017
+[src/main.rs:70:9] position = (
+    11,
+    9,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5018
+[src/main.rs:70:9] position = (
+    11,
+    10,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5019
+[src/main.rs:70:9] position = (
+    11,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5020
+[src/main.rs:70:9] position = (
+    11,
+    12,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5021
+[src/main.rs:70:9] position = (
+    11,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -5022
+[src/main.rs:70:9] position = (
+    6,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6009
+[src/main.rs:70:9] position = (
+    2,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6009
+[src/main.rs:70:9] position = (
+    6,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6009
+[src/main.rs:70:9] position = (
+    1,
+    7,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6010
+[src/main.rs:70:9] position = (
+    7,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6010
+[src/main.rs:70:9] position = (
+    7,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6010
+[src/main.rs:70:9] position = (
+    7,
+    12,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    8,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    1,
+    6,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    6,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    8,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    7,
+    12,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    1,
+    6,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6011
+[src/main.rs:70:9] position = (
+    1,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    9,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    7,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    7,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    9,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    1,
+    5,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    7,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6012
+[src/main.rs:70:9] position = (
+    9,
+    12,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6013
+[src/main.rs:70:9] position = (
+    1,
+    4,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6013
+[src/main.rs:70:9] position = (
+    1,
+    4,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6013
+[src/main.rs:70:9] position = (
+    8,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6013
+[src/main.rs:70:9] position = (
+    8,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6013
+[src/main.rs:70:9] position = (
+    9,
+    10,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6013
+[src/main.rs:70:9] position = (
+    1,
+    3,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6014
+[src/main.rs:70:9] position = (
+    9,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6014
+[src/main.rs:70:9] position = (
+    9,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6014
+[src/main.rs:70:9] position = (
+    1,
+    3,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6014
+[src/main.rs:70:9] position = (
+    9,
+    12,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    2,
+    3,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    10,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    9,
+    6,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    9,
+    6,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    1,
+    2,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    1,
+    2,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    9,
+    10,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6015
+[src/main.rs:70:9] position = (
+    3,
+    3,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6016
+[src/main.rs:70:9] position = (
+    1,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6016
+[src/main.rs:70:9] position = (
+    11,
+    7,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6016
+[src/main.rs:70:9] position = (
+    1,
+    1,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6016
+[src/main.rs:70:9] position = (
+    9,
+    5,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6016
+[src/main.rs:70:9] position = (
+    9,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6016
+[src/main.rs:70:9] position = (
+    11,
+    8,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6017
+[src/main.rs:70:9] position = (
+    2,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6017
+[src/main.rs:70:9] position = (
+    8,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6017
+[src/main.rs:70:9] position = (
+    11,
+    8,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6017
+[src/main.rs:70:9] position = (
+    4,
+    3,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6017
+[src/main.rs:70:9] position = (
+    10,
+    5,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6017
+[src/main.rs:70:9] position = (
+    3,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6018
+[src/main.rs:70:9] position = (
+    7,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6018
+[src/main.rs:70:9] position = (
+    5,
+    3,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6018
+[src/main.rs:70:9] position = (
+    11,
+    5,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6018
+[src/main.rs:70:9] position = (
+    11,
+    9,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6018
+[src/main.rs:70:9] position = (
+    11,
+    9,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6018
+[src/main.rs:70:9] position = (
+    11,
+    10,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6019
+[src/main.rs:70:9] position = (
+    4,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6019
+[src/main.rs:70:9] position = (
+    11,
+    10,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6019
+[src/main.rs:70:9] position = (
+    6,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6019
+[src/main.rs:70:9] position = (
+    11,
+    11,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6020
+[src/main.rs:70:9] position = (
+    5,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6020
+[src/main.rs:70:9] position = (
+    5,
+    5,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6020
+[src/main.rs:70:9] position = (
+    11,
+    11,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6020
+[src/main.rs:70:9] position = (
+    11,
+    12,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6021
+[src/main.rs:70:9] position = (
+    6,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6021
+[src/main.rs:70:9] position = (
+    11,
+    12,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6021
+[src/main.rs:70:9] position = (
+    11,
+    13,
+)
+[src/main.rs:70:9] heading = West
+[src/main.rs:70:9] cost = -6022
+[src/main.rs:70:9] position = (
+    11,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6022
+[src/main.rs:70:9] position = (
+    7,
+    1,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6022
+[src/main.rs:70:9] position = (
+    12,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6023
+[src/main.rs:70:9] position = (
+    13,
+    13,
+)
+[src/main.rs:70:9] heading = East
+[src/main.rs:70:9] cost = -6024
+[src/main.rs:70:9] position = (
+    7,
+    12,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7011
+[src/main.rs:70:9] position = (
+    1,
+    6,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7011
+[src/main.rs:70:9] position = (
+    1,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7012
+[src/main.rs:70:9] position = (
+    7,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7012
+[src/main.rs:70:9] position = (
+    1,
+    4,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7013
+[src/main.rs:70:9] position = (
+    8,
+    11,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7013
+[src/main.rs:70:9] position = (
+    8,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7013
+[src/main.rs:70:9] position = (
+    1,
+    3,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7014
+[src/main.rs:70:9] position = (
+    2,
+    3,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7015
+[src/main.rs:70:9] position = (
+    2,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7015
+[src/main.rs:70:9] position = (
+    1,
+    2,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7015
+[src/main.rs:70:9] position = (
+    9,
+    6,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7015
+[src/main.rs:70:9] position = (
+    9,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7016
+[src/main.rs:70:9] position = (
+    3,
+    3,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7016
+[src/main.rs:70:9] position = (
+    1,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7016
+[src/main.rs:70:9] position = (
+    3,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7016
+[src/main.rs:70:9] position = (
+    2,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    2,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    4,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    4,
+    3,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    10,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    10,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    11,
+    8,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    3,
+    2,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    8,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    8,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7017
+[src/main.rs:70:9] position = (
+    3,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    7,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    11,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    7,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    11,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    3,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    11,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    5,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    5,
+    3,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7018
+[src/main.rs:70:9] position = (
+    4,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    3,
+    2,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    11,
+    4,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    5,
+    4,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    6,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    11,
+    10,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    6,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    4,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7019
+[src/main.rs:70:9] position = (
+    5,
+    5,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7020
+[src/main.rs:70:9] position = (
+    11,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7020
+[src/main.rs:70:9] position = (
+    11,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7020
+[src/main.rs:70:9] position = (
+    5,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7020
+[src/main.rs:70:9] position = (
+    5,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7020
+[src/main.rs:70:9] position = (
+    5,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7020
+[src/main.rs:70:9] position = (
+    6,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7021
+[src/main.rs:70:9] position = (
+    5,
+    4,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7021
+[src/main.rs:70:9] position = (
+    11,
+    12,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7021
+[src/main.rs:70:9] position = (
+    6,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7021
+[src/main.rs:70:9] position = (
+    7,
+    1,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7022
+[src/main.rs:70:9] position = (
+    7,
+    1,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7022
+[src/main.rs:70:9] position = (
+    11,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7022
+[src/main.rs:70:9] position = (
+    12,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7023
+[src/main.rs:70:9] position = (
+    12,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7023
+[src/main.rs:70:9] position = (
+    7,
+    2,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7023
+[src/main.rs:70:9] position = (
+    13,
+    13,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7024
+[src/main.rs:70:9] position = (
+    13,
+    13,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7024
+[src/main.rs:70:9] position = (
+    7,
+    3,
+)
+[src/main.rs:70:9] heading = South
+[src/main.rs:70:9] cost = -7024
+[src/main.rs:70:9] position = (
+    13,
+    12,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7025
+[src/main.rs:70:9] position = (
+    13,
+    11,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7026
+[src/main.rs:70:9] position = (
+    13,
+    10,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7027
+[src/main.rs:70:9] position = (
+    13,
+    9,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7028
+[src/main.rs:70:9] position = (
+    13,
+    8,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7029
+[src/main.rs:70:9] position = (
+    13,
+    7,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7030
+[src/main.rs:70:9] position = (
+    13,
+    6,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7031
+[src/main.rs:70:9] position = (
+    13,
+    5,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7032
+[src/main.rs:70:9] position = (
+    13,
+    4,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7033
+[src/main.rs:70:9] position = (
+    13,
+    3,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7034
+[src/main.rs:70:9] position = (
+    13,
+    2,
+)
+[src/main.rs:70:9] heading = North
+[src/main.rs:70:9] cost = -7035
