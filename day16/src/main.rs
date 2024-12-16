@@ -1,5 +1,5 @@
 use std::{
-    collections::{BinaryHeap, HashMap, HashSet},
+    collections::{HashMap, HashSet},
     env::args,
     fs::read_to_string,
     path::Path,
@@ -7,7 +7,10 @@ use std::{
 
 use priority_queue::PriorityQueue;
 
-fn parse<P>(filename: P) -> (Vec<Vec<char>>, (usize, usize), (usize, usize))
+type Map = Vec<Vec<char>>;
+type Position = (usize, usize);
+
+fn parse<P>(filename: P) -> (Map, Position, Position)
 where
     P: AsRef<Path>,
 {
@@ -55,19 +58,60 @@ enum Direction {
     North,
 }
 
-fn solve_part1(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) -> isize {
+#[allow(dead_code)]
+fn print(map: &[Vec<char>], on_path: &HashSet<(usize, usize)>) {
+    for (y, row) in map.iter().enumerate() {
+        for (x, &c) in row.iter().enumerate() {
+            if on_path.contains(&(x, y)) {
+                print!("O");
+            } else {
+                print!("{}", c);
+            }
+        }
+        println!();
+    }
+}
+
+fn measure_paths(
+    predecessors: &HashMap<(Position, Direction), Vec<(Position, Direction)>>,
+    start: (usize, usize),
+    end: (usize, usize),
+    heading: Direction,
+) -> HashSet<(usize, usize)> {
+    let mut result = HashSet::new();
+
+    result.insert(end);
+    if end == start {
+        return result;
+    }
+
+    for predecessor in predecessors.get(&(end, heading)).unwrap() {
+        result.extend(measure_paths(
+            predecessors,
+            start,
+            predecessor.0,
+            predecessor.1,
+        ));
+    }
+
+    result
+}
+
+fn shortest_path(map: &[Vec<char>], start: Position, end: Position) -> (isize, usize) {
     let mut visited = HashSet::new();
     let mut queue = PriorityQueue::new();
 
     visited.insert((start, Direction::East));
     queue.push((start, Direction::East), 0);
 
+    let mut predecessors = HashMap::new();
+
     while let Some(((position, heading), cost)) = queue.pop() {
         if position == end {
-            return -cost;
+            let on_path = measure_paths(&predecessors, start, end, heading);
+            return (-cost, on_path.len());
         }
 
-        // dbg!(position, heading, cost);
         visited.insert((position, heading));
 
         let new_position = match heading {
@@ -80,11 +124,20 @@ fn solve_part1(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) ->
         if map[new_position.1][new_position.0] != '#' && !visited.contains(&(new_position, heading))
         {
             if let Some((_, old_cost)) = queue.get(&(new_position, heading)) {
-                if *old_cost < cost - 1 {
+                // same as *old_cost <= cost - 1
+                if *old_cost < cost {
                     queue.change_priority(&(new_position, heading), cost - 1);
+                    predecessors
+                        .entry((new_position, heading))
+                        .or_insert(Vec::new())
+                        .push((position, heading))
                 }
             } else {
                 queue.push((new_position, heading), cost - 1);
+                predecessors
+                    .entry((new_position, heading))
+                    .or_insert(Vec::new())
+                    .push((position, heading))
             }
         }
 
@@ -92,57 +145,93 @@ fn solve_part1(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) ->
             && heading != Direction::West
             && !visited.contains(&(position, Direction::East))
         {
-            if let Some((_, old_cost)) = queue.get(&(new_position, Direction::East)) {
-                if *old_cost < cost - 1000 {
+            if let Some((_, old_cost)) = queue.get(&(position, Direction::East)) {
+                if *old_cost <= cost - 1000 {
                     queue.change_priority(&(position, Direction::East), cost - 1000);
+                    predecessors
+                        .entry((position, Direction::East))
+                        .or_insert(Vec::new())
+                        .push((position, heading));
                 }
             } else {
                 queue.push((position, Direction::East), cost - 1000);
+                predecessors
+                    .entry((position, Direction::East))
+                    .or_insert(Vec::new())
+                    .push((position, heading));
             }
         }
         if heading != Direction::South
             && heading != Direction::North
             && !visited.contains(&(position, Direction::South))
         {
-            if let Some((_, old_cost)) = queue.get(&(new_position, Direction::South)) {
-                if *old_cost < cost - 1000 {
+            if let Some((_, old_cost)) = queue.get(&(position, Direction::South)) {
+                if *old_cost <= cost - 1000 {
                     queue.change_priority(&(position, Direction::South), cost - 1000);
+                    predecessors
+                        .entry((position, Direction::South))
+                        .or_insert(Vec::new())
+                        .push((position, heading));
                 }
             } else {
                 queue.push((position, Direction::South), cost - 1000);
+                predecessors
+                    .entry((position, Direction::South))
+                    .or_insert(Vec::new())
+                    .push((position, heading));
             }
         }
         if heading != Direction::West
             && heading != Direction::East
             && !visited.contains(&(position, Direction::West))
         {
-            if let Some((_, old_cost)) = queue.get(&(new_position, Direction::West)) {
-                if *old_cost < cost - 1000 {
+            if let Some((_, old_cost)) = queue.get(&(position, Direction::West)) {
+                if *old_cost <= cost - 1000 {
                     queue.change_priority(&(position, Direction::West), cost - 1000);
+                    predecessors
+                        .entry((position, Direction::West))
+                        .or_insert(Vec::new())
+                        .push((position, heading));
                 }
             } else {
                 queue.push((position, Direction::West), cost - 1000);
+                predecessors
+                    .entry((position, Direction::West))
+                    .or_insert(Vec::new())
+                    .push((position, heading));
             }
         }
         if heading != Direction::North
             && heading != Direction::South
             && !visited.contains(&(position, Direction::North))
         {
-            if let Some((_, old_cost)) = queue.get(&(new_position, Direction::North)) {
-                if *old_cost < cost - 1000 {
+            if let Some((_, old_cost)) = queue.get(&(position, Direction::North)) {
+                if *old_cost <= cost - 1000 {
                     queue.change_priority(&(position, Direction::North), cost - 1000);
+                    predecessors
+                        .entry((position, Direction::North))
+                        .or_insert(Vec::new())
+                        .push((position, heading));
                 }
             } else {
                 queue.push((position, Direction::North), cost - 1000);
+                predecessors
+                    .entry((position, Direction::North))
+                    .or_insert(Vec::new())
+                    .push((position, heading));
             }
         }
     }
 
-    0
+    (-1, 0)
 }
 
-fn solve_part2(map: &[Vec<char>], start: (usize, usize), end: (usize, usize)) -> usize {
-    0
+fn solve_part1(map: &[Vec<char>], start: Position, end: Position) -> isize {
+    shortest_path(map, start, end).0
+}
+
+fn solve_part2(map: &[Vec<char>], start: Position, end: Position) -> usize {
+    shortest_path(map, start, end).1
 }
 
 fn main() {
