@@ -102,15 +102,17 @@ fn solve_part1(bytes: &[Position], space: usize, time: usize) -> usize {
 
 fn solve_part2(bytes: &[Position], space: usize, _time: usize) -> String {
     let mut memory = vec![vec!['.'; space + 1]; space + 1];
+    let snapshots = (0..bytes.len())
+        .map(|i| {
+            memory[bytes[i].y as usize][bytes[i].x as usize] = '#';
 
-    for byte in bytes.iter() {
-        memory[byte.y as usize][byte.x as usize] = '#';
-        if bfs(&memory).is_none() {
-            return format!("{},{}", byte.x, byte.y);
-        }
-    }
+            memory.clone()
+        })
+        .collect::<Vec<_>>();
 
-    unreachable!()
+    let i = snapshots.partition_point(|memory| bfs(memory).is_some());
+
+    format!("{},{}", bytes[i].x, bytes[i].y)
 }
 
 fn main() {
