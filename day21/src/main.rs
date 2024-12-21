@@ -62,28 +62,6 @@ fn shortest_sequence_inner(
         );
 
         if current == goal {
-            let cost = cost
-                + if depth < keypads.len() - 1 {
-                    let subgoal = *keypads[depth + 1]
-                        .keys
-                        .iter()
-                        .find(|(_, &v)| match triggers.get(&current) {
-                            Some(trigger) => v == *trigger,
-                            None => v == 'A',
-                        })
-                        .unwrap()
-                        .0;
-
-                    shortest_sequence_inner(
-                        keypads,
-                        keypads[depth + 1].initial_position,
-                        subgoal,
-                        depth + 1,
-                    )
-                } else {
-                    1
-                };
-
             println!(
                 "{}{}: ({}, {}) -> ({}, {}) / {} = {}",
                 str::repeat("  ", depth),
@@ -95,6 +73,7 @@ fn shortest_sequence_inner(
                 keypads[depth].keys[&goal],
                 cost,
             );
+
             return cost;
         }
 
@@ -140,23 +119,48 @@ fn shortest_sequence_inner(
                 continue;
             }
 
-            let mut subcost = if depth < keypads.len() - 1 {
+            let subcost = if depth < keypads.len() - 1 {
+                let mut correction = 0;
+                let substart = match triggers.get(&current) {
+                    Some(trigger) => {
+                        if trigger == key {
+                            correction = 1;
+                        }
+                        *keypads[depth + 1]
+                            .keys
+                            .iter()
+                            .find(|(_, &v)| v == *trigger)
+                            .unwrap()
+                            .0
+                    }
+                    None => keypads[depth + 1].initial_position,
+                };
+
                 let subgoal = *keypads[depth + 1]
                     .keys
                     .iter()
-                    .find(|(_, &v)| match triggers.get(&current) {
-                        Some(trigger) if trigger == key => v == 'A',
-                        _ => v == *key,
-                    })
+                    .find(|(_, &v)| v == *key)
                     .unwrap()
                     .0;
 
-                shortest_sequence_inner(
-                    keypads,
-                    keypads[depth + 1].initial_position,
-                    subgoal,
-                    depth + 1,
-                )
+                let mut subcost =
+                    correction + shortest_sequence_inner(keypads, substart, subgoal, depth + 1);
+
+                if *neighbor == goal {
+                    let substart = subgoal;
+                    let subgoal = *keypads[depth + 1]
+                        .keys
+                        .iter()
+                        .find(|(_, &v)| v == 'A')
+                        .unwrap()
+                        .0;
+
+                    subcost += shortest_sequence_inner(keypads, substart, subgoal, depth + 1);
+                }
+
+                subcost
+            } else if *neighbor == goal {
+                2
             } else {
                 1
             };
@@ -164,7 +168,7 @@ fn shortest_sequence_inner(
             match queue.get(neighbor) {
                 Some((_, Reverse(old_cost))) if *old_cost <= cost + subcost => continue,
                 _ => {
-                    if depth == 0 && neighbor.x == 2 && neighbor.y == 2 {
+                    if depth == 0 && neighbor.x == 1 && neighbor.y == 2 {
                         println!(
                             "Queueing ({}, {}) / {} = {} + {}",
                             neighbor.x, neighbor.y, key, cost, subcost
@@ -227,14 +231,13 @@ fn solve_part1(codes: &[String]) -> usize {
         initial_position: Position { x: 2, y: 0 },
     };
 
-    // let robot_controlled_keypads =
-    //     vec![code_keypad, directional_keypad.clone(), directional_keypad];
+    let robot_controlled_keypads =
+        vec![code_keypad, directional_keypad.clone(), directional_keypad];
 
-    let robot_controlled_keypads = vec![code_keypad, directional_keypad];
+    // let robot_controlled_keypads = vec![code_keypad, directional_keypad];
 
     codes
         .iter()
-        .take(1)
         .map(|code| {
             let numeric_part = code
                 .chars()
