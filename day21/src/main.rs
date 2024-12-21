@@ -17,7 +17,7 @@ struct Position {
 #[derive(Debug, Clone)]
 struct Keypad {
     keys: HashMap<Position, char>,
-    position: Position,
+    initial_position: Position,
 }
 
 fn parse<P>(filename: P) -> Vec<String>
@@ -29,16 +29,71 @@ where
     raw_input.lines().map(|line| line.to_string()).collect()
 }
 
-fn shortest_sequence_inner(keypads: &mut [Keypad], goal: &Position, depth: usize) -> usize {
+fn shortest_sequence_inner(
+    keypads: &mut [Keypad],
+    start: Position,
+    goal: Position,
+    depth: usize,
+) -> usize {
+    println!(
+        "{}{}: Looking for ({}, {}) -> {}",
+        str::repeat("  ", depth),
+        depth,
+        start.x,
+        start.y,
+        keypads[depth].keys[&goal]
+    );
+
     let mut queue = PriorityQueue::new();
     let mut visited = HashSet::new();
+    let mut triggers = HashMap::new();
 
-    queue.push(keypads[depth].position, Reverse(0));
+    queue.push(start, Reverse(0));
 
     while let Some((current, Reverse(cost))) = queue.pop() {
-        if current == *goal {
-            dbg!(depth, goal, cost);
-            keypads[depth].position = current;
+        println!(
+            "{}{}: considering ({}, {}) / {}",
+            str::repeat("  ", depth),
+            depth,
+            current.x,
+            current.y,
+            keypads[depth].keys[&current]
+        );
+
+        if current == goal {
+            let cost = cost
+                + if depth < keypads.len() - 1 {
+                    let subgoal = *keypads[depth + 1]
+                        .keys
+                        .iter()
+                        .find(|(_, &v)| match triggers.get(&current) {
+                            Some(trigger) => v == *trigger,
+                            None => v == 'A',
+                        })
+                        .unwrap()
+                        .0;
+
+                    shortest_sequence_inner(
+                        keypads,
+                        keypads[depth + 1].initial_position,
+                        subgoal,
+                        depth + 1,
+                    )
+                } else {
+                    1
+                };
+
+            println!(
+                "{}{}: ({}, {}) -> ({}, {}) / {} = {}",
+                str::repeat("  ", depth),
+                depth,
+                start.x,
+                start.y,
+                goal.x,
+                goal.y,
+                keypads[depth].keys[&goal],
+                cost
+            );
             return cost;
         }
 
@@ -92,7 +147,12 @@ fn shortest_sequence_inner(keypads: &mut [Keypad], goal: &Position, depth: usize
                     .unwrap()
                     .0;
 
-                shortest_sequence_inner(keypads, &subgoal, depth + 1)
+                shortest_sequence_inner(
+                    keypads,
+                    keypads[depth + 1].initial_position,
+                    subgoal,
+                    depth + 1,
+                )
             } else {
                 1
             };
@@ -100,6 +160,7 @@ fn shortest_sequence_inner(keypads: &mut [Keypad], goal: &Position, depth: usize
                 Some((_, Reverse(old_cost))) if *old_cost <= cost + subcost => continue,
                 _ => {
                     queue.push(*neighbor, Reverse(cost + subcost));
+                    triggers.insert(*neighbor, *key);
                 }
             }
         }
@@ -109,16 +170,13 @@ fn shortest_sequence_inner(keypads: &mut [Keypad], goal: &Position, depth: usize
 }
 
 fn shortest_sequence(keypads: &mut [Keypad], sequence: &str) -> usize {
+    let mut start = keypads[0].initial_position;
     sequence
         .chars()
         .map(|c| {
-            let goal = *keypads[0]
-                .keys
-                .iter()
-                .find(|(_, &v)| dbg!(v) == dbg!(c))
-                .unwrap()
-                .0;
-            let cost = shortest_sequence_inner(keypads, &goal, 0);
+            let goal = *keypads[0].keys.iter().find(|(_, &v)| v == c).unwrap().0;
+            let cost = shortest_sequence_inner(keypads, start, goal, 0);
+            start = goal;
 
             cost
         })
@@ -142,7 +200,7 @@ fn solve_part1(codes: &[String]) -> usize {
         ]
         .into_iter()
         .collect(),
-        position: Position { x: 2, y: 3 },
+        initial_position: Position { x: 2, y: 3 },
     };
 
     let directional_keypad = Keypad {
@@ -155,13 +213,13 @@ fn solve_part1(codes: &[String]) -> usize {
         ]
         .into_iter()
         .collect(),
-        position: Position { x: 2, y: 0 },
+        initial_position: Position { x: 2, y: 0 },
     };
 
     // let robot_controlled_keypads =
     //     vec![code_keypad, directional_keypad.clone(), directional_keypad];
 
-    let robot_controlled_keypads = vec![code_keypad];
+    let robot_controlled_keypads = vec![code_keypad, directional_keypad];
 
     codes
         .iter()
