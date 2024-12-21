@@ -41,7 +41,7 @@ fn shortest_sequence_inner(
         depth,
         start.x,
         start.y,
-        keypads[depth].keys[&goal]
+        keypads[depth].keys[&goal],
     );
 
     let mut queue = PriorityQueue::new();
@@ -52,12 +52,13 @@ fn shortest_sequence_inner(
 
     while let Some((current, Reverse(cost))) = queue.pop() {
         println!(
-            "{}{}: considering ({}, {}) / {}",
+            "{}{}: considering ({}, {}) / {} = {}",
             str::repeat("  ", depth),
             depth,
             current.x,
             current.y,
-            keypads[depth].keys[&current]
+            keypads[depth].keys[&current],
+            cost,
         );
 
         if current == goal {
@@ -92,7 +93,7 @@ fn shortest_sequence_inner(
                 goal.x,
                 goal.y,
                 keypads[depth].keys[&goal],
-                cost
+                cost,
             );
             return cost;
         }
@@ -139,11 +140,14 @@ fn shortest_sequence_inner(
                 continue;
             }
 
-            let subcost = if depth < keypads.len() - 1 {
+            let mut subcost = if depth < keypads.len() - 1 {
                 let subgoal = *keypads[depth + 1]
                     .keys
                     .iter()
-                    .find(|(_, &v)| v == *key)
+                    .find(|(_, &v)| match triggers.get(&current) {
+                        Some(trigger) if trigger == key => v == 'A',
+                        _ => v == *key,
+                    })
                     .unwrap()
                     .0;
 
@@ -156,9 +160,16 @@ fn shortest_sequence_inner(
             } else {
                 1
             };
+
             match queue.get(neighbor) {
                 Some((_, Reverse(old_cost))) if *old_cost <= cost + subcost => continue,
                 _ => {
+                    if depth == 0 && neighbor.x == 2 && neighbor.y == 2 {
+                        println!(
+                            "Queueing ({}, {}) / {} = {} + {}",
+                            neighbor.x, neighbor.y, key, cost, subcost
+                        );
+                    }
                     queue.push(*neighbor, Reverse(cost + subcost));
                     triggers.insert(*neighbor, *key);
                 }
