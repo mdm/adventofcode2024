@@ -1,12 +1,10 @@
 use std::{
-    cmp::Reverse,
-    collections::{HashMap, HashSet},
+    collections::{HashMap, HashSet, VecDeque},
     env::args,
     fs::read_to_string,
     path::Path,
+    vec,
 };
-
-use priority_queue::PriorityQueue;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct Position {
@@ -16,8 +14,10 @@ struct Position {
 
 #[derive(Debug, Clone)]
 struct Keypad {
-    keys: HashMap<Position, char>,
+    position_to_key: HashMap<Position, char>,
+    key_to_position: HashMap<char, Position>,
     initial_position: Position,
+    missing_key_position: Position,
 }
 
 fn parse<P>(filename: P) -> Vec<String>
@@ -29,163 +29,145 @@ where
     raw_input.lines().map(|line| line.to_string()).collect()
 }
 
-fn shortest_sequence_inner(
-    keypads: &mut [Keypad],
+fn extract_paths(
+    keypad: &Keypad,
     start: Position,
     goal: Position,
-    depth: usize,
-) -> usize {
-    println!(
-        "{}{}: Looking for ({}, {}) -> {}",
-        str::repeat("  ", depth),
-        depth,
-        start.x,
-        start.y,
-        keypads[depth].keys[&goal],
-    );
+    predecessors: &HashMap<Position, Vec<(Position, char)>>,
+) -> Vec<String> {
+    if start == goal {
+        return vec!["".to_string()];
+    }
 
-    let mut queue = PriorityQueue::new();
+    predecessors[&goal]
+        .iter()
+        .flat_map(|(predecessor, key)| {
+            extract_paths(keypad, start, *predecessor, predecessors)
+                .into_iter()
+                .filter_map(|path| {
+                    if *predecessor == keypad.missing_key_position {
+                        None
+                    } else {
+                        let mut path = path;
+                        path.push(*key);
+                        Some(path)
+                    }
+                })
+                .collect::<Vec<_>>()
+        })
+        .collect()
+}
+
+fn all_shortest_paths(keypad: &Keypad, start: Position, goal: Position) -> Vec<String> {
+    let mut queue = VecDeque::new();
     let mut visited = HashSet::new();
-    let mut triggers = HashMap::new();
+    let mut predecessors = HashMap::new();
 
-    queue.push((start, false), Reverse(0));
+    queue.push_back((start, 0));
 
-    while let Some(((current, commited), Reverse(cost))) = queue.pop() {
-        println!(
-            "{}{}: considering ({}, {}){} / {} = {}",
-            str::repeat("  ", depth),
-            depth,
-            current.x,
-            current.y,
-            if commited { "+" } else { "-" },
-            keypads[depth].keys[&current],
-            cost,
-        );
-
-        if current == goal && commited {
-            println!(
-                "{}{}: ({}, {}) -> ({}, {}) / {} = {}",
-                str::repeat("  ", depth),
-                depth,
-                start.x,
-                start.y,
-                goal.x,
-                goal.y,
-                keypads[depth].keys[&goal],
-                cost,
-            );
-
-            if depth == 0 {
-                dbg!(cost);
-            }
-
-            return cost;
+    while let Some((current, cost)) = queue.pop_front() {
+        if current == goal {
+            let mut paths = extract_paths(keypad, start, goal, &predecessors);
+            paths.sort();
+            paths.dedup();
+            return paths;
         }
 
-        visited.insert((current, commited));
+        visited.insert(current);
 
-        // if depth == 2 && current.x == 0 && current.y == 1 {
-        //     println!("BOOM");
-        // }
-
-        let neighbors = if current == goal {
-            vec![(current, 'A')]
-        } else {
-            vec![
-                (
-                    Position {
-                        x: current.x - 1,
-                        y: current.y,
-                    },
-                    '<',
-                ),
-                (
-                    Position {
-                        x: current.x + 1,
-                        y: current.y,
-                    },
-                    '>',
-                ),
-                (
-                    Position {
-                        x: current.x,
-                        y: current.y - 1,
-                    },
-                    '^',
-                ),
-                (
-                    Position {
-                        x: current.x,
-                        y: current.y + 1,
-                    },
-                    'v',
-                ),
-            ]
-        };
+        let neighbors = [
+            (
+                Position {
+                    x: current.x - 1,
+                    y: current.y,
+                },
+                '<',
+            ),
+            (
+                Position {
+                    x: current.x + 1,
+                    y: current.y,
+                },
+                '>',
+            ),
+            (
+                Position {
+                    x: current.x,
+                    y: current.y - 1,
+                },
+                '^',
+            ),
+            (
+                Position {
+                    x: current.x,
+                    y: current.y + 1,
+                },
+                'v',
+            ),
+        ];
 
         for (neighbor, key) in neighbors.iter() {
-            let commit = *key == 'A';
-            if visited.contains(&(*neighbor, commit)) {
+            if visited.contains(neighbor) {
                 continue;
             }
 
-            if !keypads[depth].keys.contains_key(neighbor) {
+            if !keypad.position_to_key.contains_key(neighbor) {
                 continue;
             }
 
-            let subcost = if depth < keypads.len() - 1 {
-                let substart = match triggers.get(&(current, commited)) {
-                    Some(trigger) => {
-                        *keypads[depth + 1]
-                            .keys
-                            .iter()
-                            .find(|(_, &v)| v == *trigger)
-                            .unwrap()
-                            .0
-                    }
-                    None => keypads[depth + 1].initial_position,
-                };
-
-                let subgoal = *keypads[depth + 1]
-                    .keys
-                    .iter()
-                    .find(|(_, &v)| v == *key)
-                    .unwrap()
-                    .0;
-
-                shortest_sequence_inner(keypads, substart, subgoal, depth + 1)
-            } else {
-                1
-            };
-
-            // println!("{} has cost {}", key, subcost);
-
-            match queue.get(&(*neighbor, commit)) {
-                Some((_, Reverse(old_cost))) if *old_cost <= cost + subcost => continue,
-                _ => {
-                    // if depth == 0 && neighbor.x == 1 && neighbor.y == 2 {
-                    //     println!(
-                    //         "Queueing ({}, {}) / {} = {} + {}",
-                    //         neighbor.x, neighbor.y, key, cost, subcost
-                    //     );
-                    // }
-                    queue.push((*neighbor, commit), Reverse(cost + subcost));
-                    triggers.insert((*neighbor, commit), *key);
-                }
-            }
+            queue.push_back((*neighbor, cost + 1));
+            predecessors
+                .entry(*neighbor)
+                .or_insert(Vec::new())
+                .push((current, *key));
         }
     }
 
-    unreachable!();
+    unreachable!("No path found");
 }
 
-fn shortest_sequence(keypads: &mut [Keypad], sequence: &str) -> usize {
-    let mut start = keypads[0].initial_position;
+fn shortest_sequence_dfs_inner(
+    keypads: &[Keypad],
+    start: Position,
+    goal: Position,
+    depth: usize,
+    memo: &mut HashMap<(Position, Position, usize), usize>,
+) -> usize {
+    if let Some(&cost) = memo.get(&(start, goal, depth)) {
+        return cost;
+    }
+
+    let cost = all_shortest_paths(&keypads[depth], start, goal)
+        .into_iter()
+        .map(|subsequence| {
+            let mut subsequence = subsequence;
+            subsequence.push('A');
+            shortest_sequence_dfs(keypads, &subsequence, depth + 1, memo)
+        })
+        .min()
+        .unwrap();
+
+    memo.insert((start, goal, depth), cost);
+
+    cost
+}
+
+fn shortest_sequence_dfs(
+    keypads: &[Keypad],
+    sequence: &str,
+    depth: usize,
+    memo: &mut HashMap<(Position, Position, usize), usize>,
+) -> usize {
+    if depth == keypads.len() {
+        return sequence.len();
+    }
+
+    let mut start = keypads[depth].initial_position;
     sequence
         .chars()
         .map(|c| {
-            let goal = *keypads[0].keys.iter().find(|(_, &v)| v == c).unwrap().0;
-            let cost = shortest_sequence_inner(keypads, start, goal, 0);
+            let goal = keypads[depth].key_to_position[&c];
+            let cost = shortest_sequence_dfs_inner(keypads, start, goal, depth, memo);
             start = goal;
 
             cost
@@ -193,44 +175,51 @@ fn shortest_sequence(keypads: &mut [Keypad], sequence: &str) -> usize {
         .sum()
 }
 
-fn solve_part1(codes: &[String]) -> usize {
+fn open_doors(codes: &[String], proximity: usize) -> usize {
+    let code_pad_keys = [
+        (Position { x: 0, y: 0 }, '7'),
+        (Position { x: 1, y: 0 }, '8'),
+        (Position { x: 2, y: 0 }, '9'),
+        (Position { x: 0, y: 1 }, '4'),
+        (Position { x: 1, y: 1 }, '5'),
+        (Position { x: 2, y: 1 }, '6'),
+        (Position { x: 0, y: 2 }, '1'),
+        (Position { x: 1, y: 2 }, '2'),
+        (Position { x: 2, y: 2 }, '3'),
+        (Position { x: 1, y: 3 }, '0'),
+        (Position { x: 2, y: 3 }, 'A'),
+    ];
     let code_keypad = Keypad {
-        keys: [
-            (Position { x: 0, y: 0 }, '7'),
-            (Position { x: 1, y: 0 }, '8'),
-            (Position { x: 2, y: 0 }, '9'),
-            (Position { x: 0, y: 1 }, '4'),
-            (Position { x: 1, y: 1 }, '5'),
-            (Position { x: 2, y: 1 }, '6'),
-            (Position { x: 0, y: 2 }, '1'),
-            (Position { x: 1, y: 2 }, '2'),
-            (Position { x: 2, y: 2 }, '3'),
-            (Position { x: 1, y: 3 }, '0'),
-            (Position { x: 2, y: 3 }, 'A'),
-        ]
-        .into_iter()
-        .collect(),
+        position_to_key: code_pad_keys.iter().copied().collect(),
+        key_to_position: code_pad_keys.iter().map(|&(k, v)| (v, k)).collect(),
         initial_position: Position { x: 2, y: 3 },
+        missing_key_position: Position { x: 0, y: 3 },
     };
+
+    let directional_keypad_keys = [
+        (Position { x: 1, y: 0 }, '^'),
+        (Position { x: 2, y: 0 }, 'A'),
+        (Position { x: 0, y: 1 }, '<'),
+        (Position { x: 1, y: 1 }, 'v'),
+        (Position { x: 2, y: 1 }, '>'),
+    ];
 
     let directional_keypad = Keypad {
-        keys: [
-            (Position { x: 1, y: 0 }, '^'),
-            (Position { x: 2, y: 0 }, 'A'),
-            (Position { x: 0, y: 1 }, '<'),
-            (Position { x: 1, y: 1 }, 'v'),
-            (Position { x: 2, y: 1 }, '>'),
-        ]
-        .into_iter()
-        .collect(),
+        position_to_key: directional_keypad_keys.iter().copied().collect(),
+        key_to_position: directional_keypad_keys
+            .iter()
+            .map(|&(k, v)| (v, k))
+            .collect(),
         initial_position: Position { x: 2, y: 0 },
+        missing_key_position: Position { x: 0, y: 0 },
     };
 
-    let robot_controlled_keypads =
-        vec![code_keypad, directional_keypad.clone(), directional_keypad];
+    let mut robot_controlled_keypads = vec![code_keypad];
+    for _ in 0..proximity {
+        robot_controlled_keypads.push(directional_keypad.clone());
+    }
 
-    // let robot_controlled_keypads = vec![code_keypad, directional_keypad];
-
+    let mut memo = HashMap::new();
     codes
         .iter()
         // .skip(0)
@@ -242,14 +231,18 @@ fn solve_part1(codes: &[String]) -> usize {
                 .collect::<String>()
                 .parse::<usize>()
                 .unwrap();
-            let cost = shortest_sequence(&mut robot_controlled_keypads.clone(), code);
-            dbg!(cost) * dbg!(numeric_part)
+            let cost = shortest_sequence_dfs(&robot_controlled_keypads.clone(), code, 0, &mut memo);
+            cost * numeric_part
         })
         .sum()
 }
 
+fn solve_part1(codes: &[String]) -> usize {
+    open_doors(codes, 2)
+}
+
 fn solve_part2(codes: &[String]) -> usize {
-    287752
+    open_doors(codes, 25)
 }
 
 fn main() {
