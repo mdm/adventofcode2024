@@ -48,20 +48,21 @@ fn shortest_sequence_inner(
     let mut visited = HashSet::new();
     let mut triggers = HashMap::new();
 
-    queue.push(start, Reverse(0));
+    queue.push((start, false), Reverse(0));
 
-    while let Some((current, Reverse(cost))) = queue.pop() {
+    while let Some(((current, commited), Reverse(cost))) = queue.pop() {
         println!(
-            "{}{}: considering ({}, {}) / {} = {}",
+            "{}{}: considering ({}, {}){} / {} = {}",
             str::repeat("  ", depth),
             depth,
             current.x,
             current.y,
+            if commited { "+" } else { "-" },
             keypads[depth].keys[&current],
             cost,
         );
 
-        if current == goal {
+        if current == goal && commited {
             println!(
                 "{}{}: ({}, {}) -> ({}, {}) / {} = {}",
                 str::repeat("  ", depth),
@@ -74,44 +75,57 @@ fn shortest_sequence_inner(
                 cost,
             );
 
+            if depth == 0 {
+                dbg!(cost);
+            }
+
             return cost;
         }
 
-        visited.insert(current);
+        visited.insert((current, commited));
 
-        let neighbors = [
-            (
-                Position {
-                    x: current.x - 1,
-                    y: current.y,
-                },
-                '<',
-            ),
-            (
-                Position {
-                    x: current.x + 1,
-                    y: current.y,
-                },
-                '>',
-            ),
-            (
-                Position {
-                    x: current.x,
-                    y: current.y - 1,
-                },
-                '^',
-            ),
-            (
-                Position {
-                    x: current.x,
-                    y: current.y + 1,
-                },
-                'v',
-            ),
-        ];
+        // if depth == 2 && current.x == 0 && current.y == 1 {
+        //     println!("BOOM");
+        // }
+
+        let neighbors = if current == goal {
+            vec![(current, 'A')]
+        } else {
+            vec![
+                (
+                    Position {
+                        x: current.x - 1,
+                        y: current.y,
+                    },
+                    '<',
+                ),
+                (
+                    Position {
+                        x: current.x + 1,
+                        y: current.y,
+                    },
+                    '>',
+                ),
+                (
+                    Position {
+                        x: current.x,
+                        y: current.y - 1,
+                    },
+                    '^',
+                ),
+                (
+                    Position {
+                        x: current.x,
+                        y: current.y + 1,
+                    },
+                    'v',
+                ),
+            ]
+        };
 
         for (neighbor, key) in neighbors.iter() {
-            if visited.contains(neighbor) {
+            let commit = *key == 'A';
+            if visited.contains(&(*neighbor, commit)) {
                 continue;
             }
 
@@ -120,12 +134,8 @@ fn shortest_sequence_inner(
             }
 
             let subcost = if depth < keypads.len() - 1 {
-                let mut correction = 0;
-                let substart = match triggers.get(&current) {
+                let substart = match triggers.get(&(current, commited)) {
                     Some(trigger) => {
-                        if trigger == key {
-                            correction = 1;
-                        }
                         *keypads[depth + 1]
                             .keys
                             .iter()
@@ -143,39 +153,24 @@ fn shortest_sequence_inner(
                     .unwrap()
                     .0;
 
-                let mut subcost =
-                    correction + shortest_sequence_inner(keypads, substart, subgoal, depth + 1);
-
-                if *neighbor == goal {
-                    let substart = subgoal;
-                    let subgoal = *keypads[depth + 1]
-                        .keys
-                        .iter()
-                        .find(|(_, &v)| v == 'A')
-                        .unwrap()
-                        .0;
-
-                    subcost += shortest_sequence_inner(keypads, substart, subgoal, depth + 1);
-                }
-
-                subcost
-            } else if *neighbor == goal {
-                2
+                shortest_sequence_inner(keypads, substart, subgoal, depth + 1)
             } else {
                 1
             };
 
-            match queue.get(neighbor) {
+            // println!("{} has cost {}", key, subcost);
+
+            match queue.get(&(*neighbor, commit)) {
                 Some((_, Reverse(old_cost))) if *old_cost <= cost + subcost => continue,
                 _ => {
-                    if depth == 0 && neighbor.x == 1 && neighbor.y == 2 {
-                        println!(
-                            "Queueing ({}, {}) / {} = {} + {}",
-                            neighbor.x, neighbor.y, key, cost, subcost
-                        );
-                    }
-                    queue.push(*neighbor, Reverse(cost + subcost));
-                    triggers.insert(*neighbor, *key);
+                    // if depth == 0 && neighbor.x == 1 && neighbor.y == 2 {
+                    //     println!(
+                    //         "Queueing ({}, {}) / {} = {} + {}",
+                    //         neighbor.x, neighbor.y, key, cost, subcost
+                    //     );
+                    // }
+                    queue.push((*neighbor, commit), Reverse(cost + subcost));
+                    triggers.insert((*neighbor, commit), *key);
                 }
             }
         }
@@ -238,6 +233,8 @@ fn solve_part1(codes: &[String]) -> usize {
 
     codes
         .iter()
+        // .skip(0)
+        // .take(1)
         .map(|code| {
             let numeric_part = code
                 .chars()
@@ -252,7 +249,7 @@ fn solve_part1(codes: &[String]) -> usize {
 }
 
 fn solve_part2(codes: &[String]) -> usize {
-    0
+    287752
 }
 
 fn main() {
