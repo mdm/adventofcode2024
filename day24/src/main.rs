@@ -65,13 +65,15 @@ where
     (inputs, gates)
 }
 
-fn run_gates(inputs: &HashMap<String, bool>, gates: &[Gate]) -> HashMap<String, bool> {
+fn run_gates(inputs: &HashMap<String, bool>, gates: &[Gate]) -> Option<HashMap<String, bool>> {
     let mut inputs = inputs.clone();
     let gates = gates.to_vec();
 
     let mut ready = 0;
-    while ready < gates.len() {
+    let mut modified = true;
+    while modified && ready < gates.len() {
         ready = 0;
+        modified = false;
 
         for gate in &gates {
             if gate.inputs.iter().all(|input| inputs.contains_key(input)) {
@@ -90,18 +92,16 @@ fn run_gates(inputs: &HashMap<String, bool>, gates: &[Gate]) -> HashMap<String, 
                 };
                 inputs.insert(gate.output.clone(), output);
                 ready += 1;
-                // } else {
-                //     let missing_inputs = gate
-                //         .inputs
-                //         .iter()
-                //         .filter(|input| !inputs.contains_key(*input))
-                //         .collect::<Vec<_>>();
-                //     dbg!(missing_inputs);
+                modified = true;
             }
         }
     }
 
-    inputs
+    if modified {
+        Some(inputs)
+    } else {
+        None
+    }
 }
 
 fn get_value(outputs: &HashMap<String, bool>, prefix: &str) -> usize {
@@ -120,15 +120,39 @@ fn get_value(outputs: &HashMap<String, bool>, prefix: &str) -> usize {
 }
 
 fn solve_part1(inputs: &HashMap<String, bool>, gates: &[Gate]) -> usize {
-    let outputs = run_gates(inputs, gates);
+    let outputs = run_gates(inputs, gates).unwrap();
 
     get_value(&outputs, "z")
+}
+
+fn visualize(gates: &[Gate], basename: &str) {
+    let mut values = HashSet::new();
+    values.extend(gates.iter().flat_map(|gate| gate.inputs.iter().cloned()));
+    values.extend(gates.iter().map(|gate| gate.output.clone()));
+
+    let mut dot = "digraph day24 {\n".to_string();
+    for value in values {
+        dot.push_str(&format!("  {} [shape=circle];\n", value));
+    }
+    for (i, gate) in gates.iter().enumerate() {
+        match gate.kind {
+            GateKind::And => dot.push_str(&format!("  gate{} [shape=box, label=\"AND\"];\n", i)),
+            GateKind::Or => dot.push_str(&format!("  gate{} [shape=box, label=\"OR\"];\n", i)),
+            GateKind::Xor => dot.push_str(&format!("  gate{} [shape=box, label=\"XOR\"];\n", i)),
+        }
+        for input in &gate.inputs {
+            dot.push_str(&format!("  {} -> gate{};\n", input, i));
+        }
+        dot.push_str(&format!("  gate{} -> {};\n", i, gate.output));
+    }
+    dot.push_str("}\n");
+
+    fs::write(format!("{}.dot", basename), dot).expect("Failed to write dot file");
 }
 
 fn find_closure(gates: &[Gate], outputs: &[String], allow_or: bool) -> HashSet<Gate> {
     let mut closure = HashSet::new();
     let mut allow_or = allow_or;
-    // dbg!(outputs, allow_or);
 
     for gate in gates {
         if !outputs.contains(&gate.output) {
@@ -152,7 +176,7 @@ fn find_closure(gates: &[Gate], outputs: &[String], allow_or: bool) -> HashSet<G
     closure
 }
 
-fn find_carry_inputs(gates: &[Gate]) -> Vec<String> {
+fn find_carry_inputs(gates: &[Gate]) -> String {
     let inputs = gates
         .iter()
         .flat_map(|gate| gate.inputs.iter().cloned())
@@ -163,51 +187,103 @@ fn find_carry_inputs(gates: &[Gate]) -> Vec<String> {
         .map(|gate| gate.output.clone())
         .collect::<HashSet<_>>();
 
-    inputs
+    let mut carries = inputs
         .difference(&outputs)
         .filter(|input| !(input.starts_with("x") || input.starts_with("y")))
         .cloned()
-        .collect()
+        .collect::<Vec<_>>();
+
+    assert_eq!(carries.len(), 1);
+    carries.pop().unwrap()
 }
 
-fn visualize(gates: &[Gate]) {
-    let mut values = HashSet::new();
-    values.extend(gates.iter().flat_map(|gate| gate.inputs.iter().cloned()));
-    values.extend(gates.iter().map(|gate| gate.output.clone()));
+fn verify_adder(gates: &[Gate], inputs: &[String], result: &str, carry: &str) -> bool {
+    for value in 0..8 {
+        let values = inputs
+            .iter()
+            .enumerate()
+            .map(|(shift, input)| (input.clone(), (value >> shift) & 1 == 1))
+            .collect::<HashMap<_, _>>();
 
-    let mut dot = "digraph day24 {\n".to_string();
-    for value in values {
-        dot.push_str(&format!("  {} [shape=circle];\n", value));
+        let outputs = run_gates(&values, gates).unwrap();
+
+        let expected = values
+            .values()
+            .map(|value| if *value { 1 } else { 0 })
+            .sum::<usize>();
+
+        if outputs[result] != (expected & 1 == 1) {
+            return false;
+        }
+
+        if outputs[carry] != (expected & 2 == 2) {
+            return false;
+        }
     }
+
+    true
+}
+
+fn swap_outputs(gates: &mut [Gate], output_a: &str, output_b: &str) {
+    let mut gate_a = gates.len();
+    let mut gate_b = gates.len();
     for (i, gate) in gates.iter().enumerate() {
-        match gate.kind {
-            GateKind::And => dot.push_str(&format!("  gate{} [shape=box, label=\"AND\"];\n", i)),
-            GateKind::Or => dot.push_str(&format!("  gate{} [shape=box, label=\"OR\"];\n", i)),
-            GateKind::Xor => dot.push_str(&format!("  gate{} [shape=box, label=\"XOR\"];\n", i)),
+        if gate.output == output_a {
+            gate_a = i
         }
-        for input in &gate.inputs {
-            dot.push_str(&format!("  {} -> gate{};\n", input, i));
+        if gate.output == output_b {
+            gate_b = i;
         }
-        dot.push_str(&format!("  gate{} -> {};\n", i, gate.output));
     }
-    dot.push_str("}\n");
-
-    fs::write("day24.dot", dot).expect("Failed to write dot file");
+    let tmp = gates[gate_a].output.clone();
+    gates[gate_a].output = gates[gate_b].output.clone();
+    gates[gate_b].output = tmp;
 }
 
 fn solve_part2(_inputs: &HashMap<String, bool>, gates: &[Gate]) -> String {
-    visualize(gates);
-    let result = find_closure(gates, &["z44".into()], false);
-    let carry = find_closure(gates, &["z45".into()], true);
-    let mut adder = HashSet::new();
-    adder.extend(result);
-    adder.extend(carry);
-    dbg!(&adder);
-    dbg!(find_carry_inputs(
-        &adder.iter().cloned().collect::<Vec<_>>()
-    ));
+    visualize(gates, "day24");
 
-    "TODO".to_string()
+    let mut gates = gates.to_vec();
+    swap_outputs(&mut gates, "z21", "nhn");
+    swap_outputs(&mut gates, "z12", "vdc");
+    swap_outputs(&mut gates, "khg", "tvb");
+    swap_outputs(&mut gates, "z33", "gst");
+    let mut swapped = ["z21", "nhn", "z12", "vdc", "khg", "tvb", "z33", "gst"];
+    swapped.sort();
+
+    let mut carry_output = "z45".to_string();
+    for i in (2..45).rev() {
+        let x_input = format!("x{:02}", i);
+        let y_input = format!("y{:02}", i);
+        let result_output = format!("z{:02}", i);
+
+        let result = find_closure(&gates, &[result_output.clone()], false);
+        let carry = find_closure(&gates, &[carry_output.clone()], true);
+        let mut adder = HashSet::new();
+        adder.extend(result);
+        adder.extend(carry);
+        let adder = adder.iter().cloned().collect::<Vec<_>>();
+        let carry_input = find_carry_inputs(&adder);
+
+        if [12, 22, 25, 33, 44].contains(&i) {
+            visualize(&adder, &format!("adder{:02}", i));
+        }
+
+        let verified = verify_adder(
+            &adder,
+            &[x_input, y_input, carry_input.clone()],
+            &result_output,
+            &carry_output,
+        );
+
+        if !verified {
+            println!("Failed to verify adder {:02}", i);
+        }
+
+        carry_output = carry_input;
+    }
+
+    swapped.join(",")
 }
 
 fn main() {
